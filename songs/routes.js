@@ -4,6 +4,8 @@ const Playlist = require('../playlists/model')
 
 const router = new Router()
 
+// `POST /playlists/:id/songs`: A user should be able to add songs to their playlists. 
+// A song has:
 router.post('/playlists/:id/songs', (req, res, next) => {
     const playlistId = req.params.id
     Playlist
@@ -72,5 +74,89 @@ router.post('/songs', (req, res, next) => {
         })
         .catch(error => next(error))
 })
+
+//BONUS
+
+// PUT /playlists/:id/songs/:id A user should be able to change song information, 
+// even move it to another playlist.
+router.put('/playlists/:id/songs/:songId', (req, res, next) => {
+    const playlistId = req.params.id;
+    const songId = req.params.songId;
+
+    Playlist
+        .findById(playlistId)
+        .then(playlist => {
+            if (!playlist) {
+                return res.status(500).send({
+                    message: `Playlist does not exist`
+                })
+            }
+            Song.findOne({
+                where: {
+                    playlistId: playlistId,
+                    id: songId
+                }
+            })
+                .then(song => {
+                    if (!song) {
+                        return res.status(503).send({ message: 'There is no such song' })
+                    }
+                    song
+                        .update(req.body)
+                        .then(updatedSong => res.send(updatedSong))
+                })
+                .catch(error => next(error));
+        })
+        .catch(error => next(error))
+})
+
+// `DELETE /playlists/:id/songs/:id`: A user should be able to delete 
+// songs from their playlist.
+router.put('/playlists/:id/songs/:songId', (req, res, next) => {
+    const playlistId = req.params.id;
+    const songId = req.params.songId;
+
+    Playlist
+        .findById(playlistId)
+        .then(playlist => {
+            if (!playlist) {
+                return res.status(500).send({
+                    message: `Playlist does not exist`
+                })
+            }
+            Song.findOne({
+                where: {
+                    playlistId: playlistId,
+                    id: songId
+                }
+            })
+                .then(song => {
+                    if (!song) {
+                        return res.status(503).send({ message: 'There is no such song' })
+                    }
+                    song
+                        .update(req.body)
+                        .then(updatedSong => res.send(updatedSong))
+                })
+                .catch(error => next(error));
+        })
+        .catch(error => next(error))
+})
+
+
+
+//  Deal with this code later
+// router.get('/artists', (req, res, next) => {
+//     Song.findAll({
+//       attributes: [
+//         Sequelize.fn('DISTINCT', Sequelize.col('artist')),
+//         'artist',
+//         'title'
+//       ],
+//       order: ['artist']
+//     }).then(artist => res.send(artist));
+//   });
+
+
 
 module.exports = router
