@@ -4,17 +4,26 @@ const Playlist = require('../playlists/model')
 
 const router = new Router()
 
-router.get('/playlists/:id/songs', (req, res, next) => {
-
+router.post('/playlists/:id/songs', (req, res, next) => {
+    const playlistId = req.params.id
     Playlist
-        .findById(req.params.id)
+        .findById(playlistId)
         .then(playlist => {
             if (!playlist) {
                 return res.status(404).send({
                     message: `Playlist does not exist`
                 })
             }
-            return res.send(playlist)
+            Song.create({ ...req.body, playlistId })
+                .then(song => {
+                    if (!song) {
+                        return res.status(404).send({
+                            message: `Song does not exist`
+                        })
+                    }
+                    return res.status(201).send(song)
+                })
+                .catch(error => next(error))
         })
         .catch(error => next(error))
 })
