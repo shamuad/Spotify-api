@@ -94,7 +94,7 @@ router.put('/playlists/:id/songs/:songId', (req, res, next) => {
         .findById(playlistId)
         .then(playlist => {
             if (!playlist) {
-                return res.status(500).send({
+                return res.status(404).send({
                     message: `Playlist does not exist`
                 })
             }
@@ -106,7 +106,7 @@ router.put('/playlists/:id/songs/:songId', (req, res, next) => {
             })
                 .then(song => {
                     if (!song) {
-                        return res.status(503).send({ message: 'There is no such song' })
+                        return res.status(404).send({ message: 'There is no such song' })
                     }
                     song
                         .update(req.body)
@@ -127,7 +127,7 @@ router.delete('/playlists/:id/songs/:songId', (req, res, next) => {
         .findById(playlistId)
         .then(playlist => {
             if (!playlist) {
-                return res.status(500).send({
+                return res.status(404).send({
                     message: `Playlist does not exist`
                 })
             }
@@ -139,7 +139,7 @@ router.delete('/playlists/:id/songs/:songId', (req, res, next) => {
             })
                 .then(song => {
                     if (!song) {
-                        return res.status(503).send({ message: 'There is no such song' })
+                        return res.status(404).send({ message: 'There is no such song' })
                     }
                     song
                         .destroy()
