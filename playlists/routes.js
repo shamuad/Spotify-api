@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const Playlist = require('./model')
+const auth = require('../auth/middleware')
 
 const router = new Router()
 
