@@ -77,6 +77,13 @@ router.post('/songs', (req, res, next) => {
 
 //BONUS
 
+//  Deal with this code later
+router.get('/artists', (req, res, next) => {
+    Song.findAll({
+      }).then(artist => res.send(artist));
+  });
+
+
 // PUT /playlists/:id/songs/:id A user should be able to change song information, 
 // even move it to another playlist.
 router.put('/playlists/:id/songs/:songId', (req, res, next) => {
@@ -112,7 +119,7 @@ router.put('/playlists/:id/songs/:songId', (req, res, next) => {
 
 // `DELETE /playlists/:id/songs/:id`: A user should be able to delete 
 // songs from their playlist.
-router.put('/playlists/:id/songs/:songId', (req, res, next) => {
+router.delete('/playlists/:id/songs/:songId', (req, res, next) => {
     const playlistId = req.params.id;
     const songId = req.params.songId;
 
@@ -135,28 +142,14 @@ router.put('/playlists/:id/songs/:songId', (req, res, next) => {
                         return res.status(503).send({ message: 'There is no such song' })
                     }
                     song
-                        .update(req.body)
-                        .then(updatedSong => res.send(updatedSong))
+                        .destroy()
+                        .then(() => res.send({
+                            message: `Playlist was deleted`
+                        }))
                 })
                 .catch(error => next(error));
         })
         .catch(error => next(error))
 })
-
-
-
-//  Deal with this code later
-// router.get('/artists', (req, res, next) => {
-//     Song.findAll({
-//       attributes: [
-//         Sequelize.fn('DISTINCT', Sequelize.col('artist')),
-//         'artist',
-//         'title'
-//       ],
-//       order: ['artist']
-//     }).then(artist => res.send(artist));
-//   });
-
-
 
 module.exports = router
