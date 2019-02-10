@@ -77,7 +77,7 @@ router.post('/songs', (req, res, next) => {
 
 //BONUS
 
-//  Deal with this code later
+//  I will deal with this code later
 router.get('/artists', (req, res, next) => {
     Song.findAll({
       }).then(artist => res.send(artist));
