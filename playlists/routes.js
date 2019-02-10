@@ -5,7 +5,7 @@ const auth = require('../auth/middleware')
 const router = new Router()
 
 // `POST /playlists`: A user should be able to create a playlist (with just a name)
-router.post('/playlists', auth, (req, res, next) => {
+router.post('/playlists', (req, res, next) => {
   Playlist
     .create(req.body)
     .then(playlist => {
@@ -20,7 +20,7 @@ router.post('/playlists', auth, (req, res, next) => {
 })
 
 //`GET /playlists`: A user should be able to retrieve all their playlists
-router.get('/playlists', auth, (req, res, next) => {
+router.get('/playlists', (req, res, next) => {
   Playlist
     .findAll()
     .then(playlists => {
